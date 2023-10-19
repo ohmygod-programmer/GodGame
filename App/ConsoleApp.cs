@@ -34,7 +34,10 @@ namespace Musk
 
                     services.AddHostedService<CollisiumExperimentWorker>();
 
-                    services.AddScoped<ICollisiumSandbox, CollisiumSandbox>();
+                    services.AddScoped<CollisiumSandbox>();
+                    services.AddScoped<Deck>(d => Deck.GetStandardDeck());
+                    services.AddScoped<Player>(p => new Player("Musk", new FirstCardColorStrategy()));
+                    services.AddScoped<Player>(p => new Player("Zukerberg", new ZeroStrategy()));
 
 
                     // Зарегистрировать партнеров и их стратегии
@@ -42,22 +45,19 @@ namespace Musk
                 });
 
         }
-        /*public static void Main(string[] args)
-        {
-            
-            
-        }*/
+      
+
     }
     internal sealed class CollisiumExperimentWorker : IHostedService
     {
         private readonly ILogger _logger;
         private readonly IHostApplicationLifetime _appLifetime;
-        private readonly ICollisiumSandbox _collisiumSandbox;
+        private readonly CollisiumSandbox _collisiumSandbox;
         private const int EXPERIMENTS_COUNT = 1000000;
         public CollisiumExperimentWorker(
             ILogger<CollisiumExperimentWorker> logger,
             IHostApplicationLifetime appLifetime,
-            ICollisiumSandbox collisiumSandbox
+            CollisiumSandbox collisiumSandbox
             )
         {
             _logger = logger;
@@ -66,22 +66,10 @@ namespace Musk
         }
         private void StartGame()
         {
-            Player musk = new("Musk")
-            {
-                Strategy = new ZeroStrategy()
-            };
-            Player zuckerberg = new("Musk")
-            {
-                Strategy = new FirstCardColorStrategy()
-            };
             int wins = 0;
-            Deck deck = Deck.GetStandardDeck();
             for (int i = 0; i < EXPERIMENTS_COUNT; i++)
             {
-                deck.RandomShuffle();
-                musk.Deck = deck.GetFirstNCardsDeck(deck.Size() / 2);
-                zuckerberg.Deck = deck.GetLastNCardsDeck(deck.Size() / 2);
-                wins += _collisiumSandbox.Play(musk, zuckerberg) ? 1 : 0;
+                wins += _collisiumSandbox.Play() ? 1 : 0;
             }
             Console.WriteLine("Ребята выиграли " + wins + " раз из " + EXPERIMENTS_COUNT);
 
