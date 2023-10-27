@@ -7,13 +7,23 @@ using GodGameLibrary;
 
 namespace Musk
 {
-    internal class CollisiumSandbox : ICollisiumSandbox
+    internal class CollisiumSandbox
     {
-        public bool Play(Player player1, Player player2)
+        private readonly Player _player1;
+        private readonly Player _player2;
+        public CollisiumSandbox(IEnumerable<Player> players)
         {
-            int player1Number = player1.ChooseNumber();
-            int player2Number = player2.ChooseNumber();
-            if (player1.GetCardColor(player2Number) == player2.GetCardColor(player1Number))
+            var playersList = players.ToList();
+            _player1 = playersList[0];
+            _player2 = playersList[1];
+        }
+        public bool Play(Deck deck)
+        {
+            _player1.Deck = deck.GetFirstNCardsDeck(deck.Size() / 2);
+            _player2.Deck = deck.GetLastNCardsDeck(deck.Size() / 2);
+            int player1Number = _player1.ChooseNumber();
+            int player2Number = _player2.ChooseNumber();
+            if (_player1.GetCardColor(player2Number) == _player2.GetCardColor(player1Number))
             {
                 return true;
             }

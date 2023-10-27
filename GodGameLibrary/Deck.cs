@@ -13,16 +13,16 @@ namespace GodGameLibrary
         {
             return new Deck(StandardGenerator.getStartSequence());
         }
-        public Deck() {
-            Сards = Array.Empty<Card>();
+
+        public Deck() : this(Array.Empty<Card>())
+        {
+
         }
+
         public Deck(Card[] cards)
         {
             this.Сards = new Card[cards.Length];
             Array.Copy(cards, this.Сards, cards.Length);
-        }
-        public Deck(Deck deck) :  this(deck.Сards)
-        {
         }
         public int Size()
         {
