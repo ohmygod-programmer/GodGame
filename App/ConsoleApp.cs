@@ -53,23 +53,27 @@ namespace Musk
         private readonly ILogger _logger;
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly CollisiumSandbox _collisiumSandbox;
+        private readonly Deck _deck;
         private const int EXPERIMENTS_COUNT = 1000000;
         public CollisiumExperimentWorker(
             ILogger<CollisiumExperimentWorker> logger,
             IHostApplicationLifetime appLifetime,
-            CollisiumSandbox collisiumSandbox
+            CollisiumSandbox collisiumSandbox,
+            Deck deck
             )
         {
             _logger = logger;
             _appLifetime = appLifetime;
             _collisiumSandbox = collisiumSandbox;
+            _deck = deck;
         }
         private void StartGame()
         {
             int wins = 0;
             for (int i = 0; i < EXPERIMENTS_COUNT; i++)
             {
-                wins += _collisiumSandbox.Play() ? 1 : 0;
+                _deck.RandomShuffle();
+                wins += _collisiumSandbox.Play(_deck) ? 1 : 0;
             }
             Console.WriteLine("Ребята выиграли " + wins + " раз из " + EXPERIMENTS_COUNT);
 
