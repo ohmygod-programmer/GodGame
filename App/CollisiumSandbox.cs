@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GodGameLibrary;
 
-namespace Musk
+namespace GodGameApp
 {
     internal class CollisiumSandbox
     {
