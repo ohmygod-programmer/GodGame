@@ -7,7 +7,7 @@ using GodGameLibrary;
 
 namespace GodGameApp
 {
-    internal class CollisiumSandbox
+    public class CollisiumSandbox
     {
         private readonly Player _player1;
         private readonly Player _player2;
